@@ -1,0 +1,30 @@
+{
+  "name": "zeroquant-cockpit",
+  "version": "2.0.0",
+  "description": "ZeroQuant Capital Trading Cockpit Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "@sendgrid/mail": "^7.7.0",
+    "google-spreadsheet": "^3.3.0",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "zeroquant",
+    "trading",
+    "ai",
+    "dashboard"
+  ],
+  "author": "ZeroQuant Capital"
+}
