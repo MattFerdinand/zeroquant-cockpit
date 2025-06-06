@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZeroQuant Cockpit</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0a0a0a;
+      color: #00ffc8;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #111;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #00ffc8;
+    }
+    main {
+      padding: 2rem;
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #00ffc8;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #00ffc8;
+    }
+    .log {
+      font-family: monospace;
+      white-space: pre-wrap;
+      background-color: #0f0f0f;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px dashed #00ffc8;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    ZeroQuant v2.0 Cockpit Dashboard
+  </header>
+  <main>
+    <div class="card">
+      <h2>Status</h2>
+      <p id="status">Loading...</p>
+    </div>
+    <div class="card">
+      <h2>Latest Trades</h2>
+      <div class="log" id="tradeLog">Waiting for data...</div>
+    </div>
+  </main>
+
+  <script>
+    async function fetchStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        document.getElementById('status').innerText = `System: ${data.systemStatus}\nEnvironment: ${data.environment}`;
+      } catch (err) {
+        document.getElementById('status').innerText = 'Error fetching status.';
+      }
+    }
+
+    async function fetchTrades() {
+      try {
+        const res = await fetch('/api/trades');
+        const data = await res.json();
+        const log = data.map(entry => `${entry.timestamp}: ${entry.symbol} - ${entry.action} @ ${entry.price}`).join('\n');
+        document.getElementById('tradeLog').innerText = log;
+      } catch (err) {
+        document.getElementById('tradeLog').innerText = 'Error loading trade log.';
+      }
+    }
+
+    fetchStatus();
+    fetchTrades();
+    setInterval(fetchTrades, 10000);
+  </script>
+</body>
+</html>
