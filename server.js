@@ -1,18 +1,23 @@
-// --- API: Status ---
-app.get('/api/status', (req, res) => {
-  res.json({
-    systemStatus: 'Online',
-    environment: 'Production',
-    timestamp: new Date().toISOString()
-  });
+const express = require("express");
+const path = require("path");
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
+// Serve static files from the public folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// API status check
+app.get("/api/status", (req, res) => {
+  res.json({ status: "Cockpit online" });
 });
 
-// --- API: Trades ---
-let tradeHistory = [
-  { timestamp: new Date().toISOString(), symbol: 'XRP', action: 'BUY', price: 0.589 },
-  { timestamp: new Date().toISOString(), symbol: 'XLM', action: 'SELL', price: 0.121 },
-];
+// Catch-all route to serve dashboard
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
+});
 
-app.get('/api/trades', (req, res) => {
-  res.json(tradeHistory);
+// Start the server
+app.listen(PORT, () => {
+  console.log(`ZeroQuant Cockpit running on port ${PORT}`);
 });
